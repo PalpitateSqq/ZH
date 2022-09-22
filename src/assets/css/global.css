@@ -25,3 +25,9 @@ body,
   /* float: right; */
   text-align: center;
 }
+.treeTable {
+  margin-top: 15px;
+}
+.el-cascader {
+  width: 100%;
+}

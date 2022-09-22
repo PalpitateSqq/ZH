@@ -79,6 +79,7 @@
           width="180px"
         >
           <template slot-scope="scope">
+            <!-- 修改 -->
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -86,6 +87,7 @@
               round
               @click="showEditDialog(scope.row.id)"
             ></el-button>
+            <!-- 删除 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
@@ -93,6 +95,7 @@
               round
               @click="removeUserById(scope.row.id)"
             ></el-button>
+            <!-- 分配角色 -->
             <el-tooltip
               effect="dark"
               content="分配角色"
@@ -229,8 +232,8 @@
       <div>
         <p>当前用户：{{userInfo.username}}</p>
         <p>当前角色：{{userInfo.role_name}}</p>
-        <p>
-          分配新角色：<el-select
+        <p>分配新角色：
+          <el-select
             v-model="selectRoleId"
             placeholder="请选择新角色"
           >

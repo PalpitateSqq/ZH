@@ -16,6 +16,8 @@ axios.interceptors.request.use(config => {
 import './assets/fonts/iconfont.css'
 // 导入全局样式表
 import './assets/css/global.css'
+import ZkTable from 'vue-table-with-tree-grid'
+Vue.component('tree-table', ZkTable)
 Vue.config.productionTip = false
 
 new Vue({
