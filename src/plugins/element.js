@@ -1,5 +1,9 @@
 import Vue from 'vue'
+// import Timeline from './timeline/index'
+// import TimelineItem from './timeline-item/index'
 import {
+  Timeline,
+  TimelineItem,
   Button,
   Form,
   FormItem,
@@ -39,6 +43,8 @@ import {
   Upload
 } from 'element-ui'
 
+Vue.use(Timeline)
+Vue.use(TimelineItem)
 Vue.use(Button)
 Vue.use(Step)
 Vue.use(Upload)
