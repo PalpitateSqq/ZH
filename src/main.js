@@ -6,12 +6,23 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 // 设置根路径
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
-// 预处理
+// 预处理，在每次访问前在请求头加入 token，展示进度条 NProgress.start();
 axios.interceptors.request.use(config => {
+  NProgress.start()
   config.headers.Authorization = window.sessionStorage.getItem('token')
   // 必不可少
   return config
 })
+// 在 response 拦截器中，隐藏进度条 NProgress.done();
+axios.interceptors.response.use(config => {
+  NProgress.done()
+  return config
+})
+
+// 导入 NProgress 包对应的 js、css
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 导入字体图标
 import './assets/fonts/iconfont.css'
 // 导入全局样式表
