@@ -77,6 +77,7 @@
               type="primary"
               icon="el-icon-edit"
               circle
+              @click="showEditDialog(scope.row.goods_id)"
             ></el-button>
             <el-button
               type="danger"
@@ -99,6 +100,55 @@
       >
       </el-pagination>
     </el-card>
+    <!-- 编辑商品对话框 -->
+    <el-dialog
+      title="编辑商品"
+      :visible.sync="editDialogVisible"
+      width="50%"
+    >
+      <el-form
+        :model="editGoodsList"
+        :rules="editGoodsListRules"
+        ref="editGoodsListRef"
+        label-width="80px"
+      >
+        <el-form-item
+          label="商品 ID"
+          style="width:90%"
+        >
+          <el-input
+            disabled
+            v-model="editGoodsList.goods_id"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="editGoodsList.goods_name"></el-input>
+        </el-form-item>
+        <el-form-item label="商品价格">
+          <el-input v-model="editGoodsList.goods_price"></el-input>
+        </el-form-item>
+        <el-form-item label="商品重量">
+          <el-input v-model="editGoodsList.goods_weight"></el-input>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="editGoodsList.goods_number"></el-input>
+        </el-form-item>
+        <el-form-item label="商品介绍">
+          <el-input v-model="editGoodsList.goods_introduce"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="editGood"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -114,7 +164,14 @@ export default {
       //总条数
       total: 0,
       //商品列表
-      goodsList: []
+      goodsList: [],
+      editDialogVisible: false,
+      // 编辑后的商品数据
+      editGoodsList: {},
+      // 编辑后的商品数据校验
+      editGoodsListRules: {
+        nonempty: [{ required: true, message: '请输入商品名称', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -165,6 +222,28 @@ export default {
     // 点击添加商品按钮处理事件
     goAddpage() {
       this.$router.push('/goods/add')
+    },
+    // 点击编辑按钮展示对话框
+    async showEditDialog(id) {
+      this.editDialogVisible = true
+      const { data: res } = await this.$http.get(`goods/${id}`)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.editGoodsList = res.data
+    },
+    // 点击确认提交编辑按钮
+    editGood() {
+      // 对表单进行校验
+      this.$refs.editGoodsListRef.validate(async valid => {
+        if (!valid) return
+        //发起添加用户请求
+        const { data: res } = await this.$http.put(`goods/${this.editGoodsList.goods_id}`, this.editGoodsList)
+        console.log(res)
+
+        if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+        // 隐藏对话框
+        this.editDialogVisible = false
+        this.getGoodsList()
+      })
     }
   }
 }

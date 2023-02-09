@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div
+    class="container"
+    id="container"
+  >
     <div class="form-container sign-up-container">
 
       <!-- 注册表单 -->
@@ -92,6 +95,7 @@
             id="signIn"
             @click="signInButton"
           >登陆</button>
+
         </div>
         <div class="overlay-pannel overlay-right">
           <h1>没有帐号？</h1>
@@ -130,9 +134,11 @@ export default {
       const { data: res } = await this.$http.post('login', this.loginForm)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.$message.success(res.meta.msg)
+      console.log(res)
+
       // 将 token 保存在 sessionStorage中
-      window.sessionStorage.setItem('token', res.data.token)
-      this.$router.push('/home')
+      // window.sessionStorage.setItem('token', result.data.token)
+      // this.$router.push('/home')
     }
   }
 }
@@ -196,7 +202,6 @@ a {
   overflow: hidden;
   max-width: 100vw;
   min-height: 70vh;
-  margin: 50px 300px;
 }
 .form-container form {
   background: #fff;

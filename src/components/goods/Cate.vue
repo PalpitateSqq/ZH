@@ -4,7 +4,7 @@
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+      <el-breadcrumb-item>商品分类</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card>
@@ -184,9 +184,7 @@ export default {
       },
       // 添加分类的表单验证规则对象
       addCateFormRules: {
-        cat_name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
-        ]
+        cat_name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }]
       },
       // 父级分类列表
       parentCateList: [],
@@ -241,9 +239,7 @@ export default {
     parentCateChanged() {
       if (this.selectedKeys.length > 0) {
         // 父级分类的 id
-        this.addCateForm.cat_pid = this.selectedKeys[
-          this.selectedKeys.length - 1
-        ]
+        this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
         // 当前分类的等级
         this.addCateForm.cat_level = this.selectedKeys.length
         return
@@ -258,12 +254,8 @@ export default {
       // 预验证表单数据
       this.$refs.addCateFormRef.validate(async valid => {
         if (!valid) return
-        const { data: res } = await this.$http.post(
-          'categories',
-          this.addCateForm
-        )
-        if (res.meta.status !== 201)
-          return this.$message.console.error(res.meta.msg)
+        const { data: res } = await this.$http.post('categories', this.addCateForm)
+        if (res.meta.status !== 201) return this.$message.console.error(res.meta.msg)
         this.getCateList()
         this.addCateDialogVisible = false
       })

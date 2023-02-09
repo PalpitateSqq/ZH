@@ -303,24 +303,15 @@ export default {
       },
       //添加用户的验证规则
       addFormRules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-        ],
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }],
         email: [
           // 是否输入邮箱
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           //验证邮箱
           { validator: checkEmail, trigger: 'blur' }
         ],
-        mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { validator: checkMobile, trigger: 'blur' }
-        ]
+        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { validator: checkMobile, trigger: 'blur' }]
       },
       // 查询到的用户信息
       editFrom: {},
@@ -342,8 +333,7 @@ export default {
       const { data: result } = await this.$http.get('users', {
         params: this.usersInfo
       })
-      if (result.meta.status !== 200)
-        return this.$message.error('获取用户列表失败！')
+      if (result.meta.status !== 200) return this.$message.error('获取用户列表失败！')
       this.usersList = result.data.users
       this.total = result.data.total
     },
@@ -360,14 +350,12 @@ export default {
     },
     // 监听状态 switch 开关状态的改变
     async userStateChanged(userInfo) {
-      const { data: result } = await this.$http.put(
-        `users/${userInfo.id}/state/${userInfo.mg_state}`
-      )
-      if (result.meta.status !== 200) {
+      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+      if (res.meta.status !== 200) {
         userInfo.mg_state = !userInfo.mg_state
-        return this.$message.error('修改用户状态失败！')
+        return this.$message.error(res.meta.msg)
       }
-      this.$message.success('修改用户状态成功！')
+      this.$message.success(res.meta.msg)
     },
     // 监听添加用户对话框的关闭事件
     addDialogClose() {
@@ -379,8 +367,7 @@ export default {
         if (!valid) return
         //发起添加用户请求
         const { data: result } = await this.$http.post('users', this.addForm)
-        if (result.meta.status !== 201)
-          return this.$message.error('添加用户失败！')
+        if (result.meta.status !== 201) return this.$message.error('添加用户失败！')
         this.$message.success('添加用户成功！')
         // 隐藏对话框
         this.addDialogVisible = false
@@ -392,8 +379,7 @@ export default {
     async showEditDialog(id) {
       this.editDialogVisible = true
       const { data: result } = await this.$http.get(`users/${id}`)
-      if (result.meta.status !== 200)
-        return this.$message.error('查询用户信息失败！')
+      if (result.meta.status !== 200) return this.$message.error('查询用户信息失败！')
       this.$message.success('查询用户信息成功！')
       this.editFrom = result.data
     },
@@ -405,15 +391,11 @@ export default {
     editUserInfo() {
       this.$refs.editFromRef.validate(async valid => {
         if (!valid) return this.$message.error('用户数据格式错误！')
-        const { data: result } = await this.$http.put(
-          `users/${this.editFrom.id}`,
-          {
-            email: this.editFrom.email,
-            mobile: this.editFrom.mobile
-          }
-        )
-        if (result.meta.status !== 200)
-          return this.$message.error('更新用户信息失败！')
+        const { data: result } = await this.$http.put(`users/${this.editFrom.id}`, {
+          email: this.editFrom.email,
+          mobile: this.editFrom.mobile
+        })
+        if (result.meta.status !== 200) return this.$message.error('更新用户信息失败！')
         this.editDialogVisible = false
         this.getUserList()
         this.$message.success('更新用户信息成功！')
@@ -421,20 +403,15 @@ export default {
     },
     // 根据 ID 删除用户对应的信息
     async removeUserById(id) {
-      const result_confirm = await this.$confirm(
-        '此操作将永久删除该用户, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).catch(err => err)
+      const result_confirm = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
       // 用户确认删除，返回值为字符串 confirm；取消删除则返回值为字符串 cancel
       if (result_confirm === 'cancel') return this.$message.info('已取消删除！')
       const { data: result } = await this.$http.delete(`users/${id}`)
-      if (result.meta.status !== 200)
-        return this.$message.error('删除用户失败！')
+      if (result.meta.status !== 200) return this.$message.error('删除用户失败！')
       this.$message.success('删除用户成功！')
       this.getUserList()
     },
@@ -450,12 +427,9 @@ export default {
     // 点击按钮分配角色
     async saveRoleInfo() {
       if (!this.selectRoleId) return this.$message.error('您未选择新角色')
-      const { data: res } = await this.$http.put(
-        `users/${this.userInfo.id}/role`,
-        {
-          rid: this.selectRoleId
-        }
-      )
+      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, {
+        rid: this.selectRoleId
+      })
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.getUserList()
       this.setRoleDialogVisible = false

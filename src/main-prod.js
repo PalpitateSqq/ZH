@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
-import './plugins/element.js'
+import router from '@/router'
 import axios from 'axios'
 Vue.prototype.$http = axios
 // 设置根路径
@@ -21,7 +20,6 @@ axios.interceptors.response.use(config => {
 
 // 导入 NProgress 包对应的 js、css
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 
 // 导入字体图标
 import './assets/fonts/iconfont.css'
@@ -42,10 +40,7 @@ Vue.filter('dataFormat', originVal => {
 })
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor'
-// 导入富文本编辑器对应的样式
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+
 // 将富文本编辑器注册为全局可用的组件
 Vue.use(VueQuillEditor)
 

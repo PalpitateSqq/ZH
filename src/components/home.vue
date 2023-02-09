@@ -3,8 +3,11 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/images/head_portrait.jpg">
-        <span>电商后台管理系统</span>
+        <img
+          src="../assets/images/head_portrait.jpg"
+          @click="goWelcome"
+        >
+        <span>州海后台管理系统</span>
       </div>
       <el-button
         type="info"
@@ -100,8 +103,7 @@ export default {
     // 获取所有的菜单
     async getMenuList() {
       const { data: result } = await this.$http.get('menus')
-      if (result.meta.status !== 200)
-        return this.$message.error('获取左侧边栏数据失败！')
+      if (result.meta.status !== 200) return this.$message.error('获取左侧边栏数据失败！')
       this.menuList = result.data
     },
     // 点击按钮，切换菜单的折叠与展开
@@ -112,6 +114,9 @@ export default {
     saveNavState(activePath) {
       this.activePath = activePath
       window.sessionStorage.setItem('activePath', activePath)
+    },
+    goWelcome() {
+      this.$router.push('/welcome')
     }
   }
 }
